@@ -21,8 +21,8 @@ Para executar o projeto, você precisará das seguintes ferramentas instaladas e
      "MySqlConnection": "sua_string_de_conexão_mysql"
    
 ### Utilização
-. A camada Web pode ser acessada em http://localhost:porta-web.
-. A documentação da API pode ser acessada via Swagger em http://localhost:porta-api/swagger.
+1. A camada Web pode ser acessada em http://localhost:porta-web.
+2. A documentação da API pode ser acessada via Swagger em http://localhost:porta-api/swagger.
 
 ### Contribuindo
 Se desejar contribuir para o projeto, sinta-se à vontade para criar pull requests ou abrir problemas (issues) no repositório.
