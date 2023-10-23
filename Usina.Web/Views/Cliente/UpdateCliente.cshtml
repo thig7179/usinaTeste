@@ -1,0 +1,73 @@
+﻿@model Cliente
+
+<form id="UpdateClienteForm">
+    @Html.AntiForgeryToken()
+    <input type="hidden" class="form-control" name="Codigo" id="Codigo" />
+    <input type="hidden" class="form-control" name="DataInsercao" id="DataInsercao" />
+    <div class="form-group">
+        <label for="Nome">Nome:</label>
+        <input type="text" class="form-control" name="Nome" id="Nome" />
+    </div>
+
+    <div class="form-group">
+        <label for="Endereco">Endereço:</label>
+        <input type="text" class="form-control" name="Endereco" id="Endereco" />
+    </div>
+
+    <div class="form-group">
+        <label for="Cidade">Cidade:</label>
+        <input type="text" class="form-control" name="Cidade" id="Cidade" />
+    </div>
+
+    <div class="form-group">
+        <label for="UF">UF:</label>
+        <input type="text" class="form-control" name="UF" id="UF" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Cadastrar</button>
+</form>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var url = window.location.href;
+        var codigo = url.substring(url.lastIndexOf("/") + 1);
+
+        $.ajax({
+            type: "GET",
+            url: "/Cliente/ObterClientePorCodigo?codigo=" + codigo,
+            success: function (data) {
+                console.log(data)
+                $('#Nome').val(data.nome);
+                $('#Endereco').val(data.endereco);
+                $('#Cidade').val(data.cidade);
+                $('#UF').val(data.uf);
+                $('#Codigo').val(data.codigo);
+                $('#DataInsercao').val(data.dataInsercao);
+            },
+            error: function () {
+                alert('Ocorreu um erro ao obter os dados do cliente.');
+            }
+        });
+
+        $('#UpdateClienteForm').submit(function (e) {
+            e.preventDefault();
+
+            var formData = $(this).serialize();
+
+            $.ajax({
+                url: '@Url.Action("UpdateCliente", "Cliente")',
+                type: 'POST',
+                data: formData,
+                success: function (data) {
+
+                    window.location.href = '@Url.Action("ClienteIndex", "Cliente")';
+                },
+                error: function (xhr, status, error) {
+                    // Trate erros aqui, se necessário
+                    console.log(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+

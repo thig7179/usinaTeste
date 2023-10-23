@@ -1,0 +1,89 @@
+﻿@{
+    ViewBag.Title = "Clientes";
+}
+<div>
+    <h2>Lista de Clientes</h2>
+    <table class="table table-striped" id="tabela-clientes">
+        <caption>
+            <div class="float-right">
+                <a asp-action="CadastrarCliente" type="button" class="btn btn-success pull-right">+ Cadastrar</a>
+            </div>
+        </caption>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Endereço</th>
+                <th>Cidade</th>
+                <th>UF</th>
+                <th>Ação</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Aqui serão exibidos os clientes obtidos via AJAX -->
+        </tbody>
+    </table>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    function excluirCliente(clienteCodigo) {
+        var confirmar = confirm("Você tem certeza que deseja excluir o cliente?");
+        if (confirmar) {
+            $.ajax({
+                type: "GET",
+                url: "/Cliente/DeletarCliente?codigo=" + clienteCodigo,
+                success: function (response) {
+                    if (response) {
+                        // Atualize a página ou faça qualquer outra ação necessária após a exclusão
+                        location.reload();
+                    } else {
+                        alert("Erro ao excluir o cliente.");
+                    }
+                },
+                error: function () {
+                   
+                }
+            });
+        }
+    }
+
+    $(document).ready(function () {
+        $.ajax({
+            url: '@Url.Action("ObterClientes", "Cliente")',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var tabelaClientes = $('#tabela-clientes tbody');
+                tabelaClientes.empty();
+
+                $.each(data, function (index, cliente) {
+                    console.log(cliente)
+                    var linha = `
+                            <tr>
+                                <td>${cliente.nome}</td>
+                                <td>${cliente.endereco}</td>
+                                <td>${cliente.cidade}</td>
+                                <td>${cliente.uf}</td>
+                                <td>
+                                    <a class="btn btn-primary btn-ver" href="/Cliente/UpdateCliente/${cliente.codigo}"><i class ="fas fa-edit"></i></a>
+                                    <a class="btn btn-danger btn-deletar" onclick="excluirCliente(${cliente.codigo})"><i class ="fas fa-trash"></i></a>
+                                </td>
+                            </tr>
+                        `;
+                    tabelaClientes.append(linha);
+                });
+
+            },
+            error: function () {
+                alert('Ocorreu um erro ao obter a lista de clientes.');
+            }
+        });
+        
+        
+        
+
+
+    });
+</script>
+
